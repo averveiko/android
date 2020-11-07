@@ -2,13 +2,13 @@ package ru.averveyko.messagemanager;
 
 import android.graphics.drawable.Drawable;
 
-public class Message {
+public class Dialog {
     private String author;
     private String text;
     private Drawable avatar;
     private int color;
 
-    public Message(String author, String text, Drawable avatar, int color) {
+    public Dialog(String author, String text, Drawable avatar, int color) {
         this.author = author;
         this.text = text;
         this.avatar = avatar;

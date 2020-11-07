@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ListView listViewMsg;
-    private final List<Message> messages = new ArrayList<>();
+    private final List<Dialog> dialogs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +30,14 @@ public class MainActivity extends AppCompatActivity {
         //Вставляем демо-записи в список записей
         addDemoMessages();
         // Отображаем записи
-        showMessages(messages);
+        showMessages(dialogs);
     }
 
     /**
-     * Отобразить список сообщений
+     * Отобразить список дилогов
      */
-    private void showMessages(List<Message> messages) {
-        Adapter adapter = new Adapter(messages);
+    private void showMessages(List<Dialog> dialogs) {
+        Adapter adapter = new Adapter(dialogs);
         listViewMsg.setAdapter(adapter);
     }
 
@@ -47,12 +46,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private void addDemoMessages() {
         //android:src="@drawable/begemot"
-        messages.add(new Message("Маргарита", "Это водка?",
+        dialogs.add(new Dialog("Маргарита", "Это водка?",
                 ContextCompat.getDrawable(this, R.drawable.margarita), getColor(R.color.teal_200)));
-        messages.add(new Message("Бегемот", "Помилуйте, королева, разве я позволил" +
+        dialogs.add(new Dialog("Бегемот", "Помилуйте, королева, разве я позволил" +
                 " бы себе налить даме водки? Это чистый спирт!",
                 ContextCompat.getDrawable(this, R.drawable.begemot), getColor(R.color.purple_200)));
-        messages.add(new Message("Воланд", "Аннушка уже купила подсолнечное масло," +
+        dialogs.add(new Dialog("Воланд", "Аннушка уже купила подсолнечное масло," +
                 " и не только купила, но даже разлила. Так что заседание не состоится. Далее " +
                 "длинный текст, выходящий за пределы экрана",
                 ContextCompat.getDrawable(this, R.drawable.voland), getColor(R.color.teal_700)));
@@ -64,20 +63,20 @@ public class MainActivity extends AppCompatActivity {
  */
 class Adapter extends BaseAdapter {
 
-    private List<Message> messages;
+    private List<Dialog> dialogs;
 
-    public Adapter(List<Message> messages) {
-        this.messages = messages;
+    public Adapter(List<Dialog> dialogs) {
+        this.dialogs = dialogs;
     }
 
     @Override
     public int getCount() {
-        return messages.size();
+        return dialogs.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return messages.get(position);
+        return dialogs.get(position);
     }
 
     @Override
@@ -90,20 +89,20 @@ class Adapter extends BaseAdapter {
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        View msgView = convertView != null ?
+        View dialogView = convertView != null ?
                 convertView :
                 inflater.inflate(R.layout.list_item_msg, parent, false);
 
-        TextView author = msgView.findViewById(R.id.item_msg_author);
-        TextView text = msgView.findViewById(R.id.item_msg_text);
-        ImageView avatar = msgView.findViewById(R.id.img_avatar);
+        TextView author = dialogView.findViewById(R.id.item_msg_author);
+        TextView text = dialogView.findViewById(R.id.item_msg_text);
+        ImageView avatar = dialogView.findViewById(R.id.img_avatar);
 
-        Message msg = (Message) getItem(position);
-        author.setText(msg.getAuthor());
-        text.setText(msg.getText());
-        avatar.setImageDrawable(msg.getAvatar());
-        msgView.setBackgroundColor(msg.getColor());
+        Dialog dialog = (Dialog) getItem(position);
+        author.setText(dialog.getAuthor());
+        text.setText(dialog.getText());
+        avatar.setImageDrawable(dialog.getAvatar());
+        dialogView.setBackgroundColor(dialog.getColor());
 
-        return msgView;
+        return dialogView;
     }
 }
