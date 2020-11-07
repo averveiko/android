@@ -3,6 +3,7 @@ package ru.averveyko.messagemanager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,12 @@ public class MainActivity extends AppCompatActivity {
 
         //Создаем демо-записи
         List<Message> messages = new ArrayList<>();
-        messages.add(new Message("Маргарита", "Это водка?"));
-        messages.add(new Message("Бегемот", "Помилуйте, королева, разве я позволил бы себе налить даме водки? Это чистый спирт!"));
-        messages.add(new Message("Воланд", "Аннушка уже купила подсолнечное масло, и не только купила, но даже разлила. Так что заседание не состоится."));
+        messages.add(new Message("Маргарита", "Это водка?", getColor(R.color.teal_200)));
+        messages.add(new Message("Бегемот", "Помилуйте, королева, разве я позволил" +
+                " бы себе налить даме водки? Это чистый спирт!", getColor(R.color.purple_200)));
+        messages.add(new Message("Воланд", "Аннушка уже купила подсолнечное масло," +
+                " и не только купила, но даже разлила. Так что заседание не состоится. Далее " +
+                "очень длинный текст, выходящий за пределы экрана", getColor(R.color.teal_700)));
         // Отображаем записи
         showMessages(messages);
     }
@@ -83,6 +87,9 @@ class Adapter extends BaseAdapter {
         Message msg = (Message) getItem(position);
         author.setText(msg.getAuthor());
         text.setText(msg.getText());
+        msgView.setBackgroundColor(msg.getColor());
+
+        Log.v("keash", "set bg color to " + msg.getColor());
         return msgView;
     }
 }
