@@ -1,15 +1,19 @@
 package ru.averveyko.messagemanager;
 
+import android.graphics.drawable.Drawable;
+
 public class Message {
     private String author;
     private String text;
+    private Drawable avatar;
     private int color;
     // TODO pic
 
 
-    public Message(String author, String text, int color) {
+    public Message(String author, String text, Drawable avatar, int color) {
         this.author = author;
         this.text = text;
+        this.avatar = avatar;
         this.color = color;
     }
 
@@ -19,6 +23,14 @@ public class Message {
 
     public String getText() {
         return text;
+    }
+
+    public Drawable getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Drawable avatar) {
+        this.avatar = avatar;
     }
 
     public int getColor() {
