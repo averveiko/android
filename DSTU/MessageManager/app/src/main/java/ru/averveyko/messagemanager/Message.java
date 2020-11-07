@@ -7,8 +7,6 @@ public class Message {
     private String text;
     private Drawable avatar;
     private int color;
-    // TODO pic
-
 
     public Message(String author, String text, Drawable avatar, int color) {
         this.author = author;

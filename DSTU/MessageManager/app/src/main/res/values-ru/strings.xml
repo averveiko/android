@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Менеджер сообщений</string>
+    <string name="txt_dialog_list">Список диалогов</string>
+    <string name="user_avatar_descr">Аватар пользователя</string>
+</resources>

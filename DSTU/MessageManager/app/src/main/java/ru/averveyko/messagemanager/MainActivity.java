@@ -47,12 +47,15 @@ public class MainActivity extends AppCompatActivity {
      */
     private void addDemoMessages() {
         //android:src="@drawable/begemot"
-        messages.add(new Message("Маргарита", "Это водка?", ContextCompat.getDrawable(this, R.drawable.margarita), getColor(R.color.teal_200)));
+        messages.add(new Message("Маргарита", "Это водка?",
+                ContextCompat.getDrawable(this, R.drawable.margarita), getColor(R.color.teal_200)));
         messages.add(new Message("Бегемот", "Помилуйте, королева, разве я позволил" +
-                " бы себе налить даме водки? Это чистый спирт!", ContextCompat.getDrawable(this, R.drawable.begemot), getColor(R.color.purple_200)));
+                " бы себе налить даме водки? Это чистый спирт!",
+                ContextCompat.getDrawable(this, R.drawable.begemot), getColor(R.color.purple_200)));
         messages.add(new Message("Воланд", "Аннушка уже купила подсолнечное масло," +
                 " и не только купила, но даже разлила. Так что заседание не состоится. Далее " +
-                "длинный текст, выходящий за пределы экрана", ContextCompat.getDrawable(this, R.drawable.voland), getColor(R.color.teal_700)));
+                "длинный текст, выходящий за пределы экрана",
+                ContextCompat.getDrawable(this, R.drawable.voland), getColor(R.color.teal_700)));
     }
 }
 
@@ -101,7 +104,6 @@ class Adapter extends BaseAdapter {
         avatar.setImageDrawable(msg.getAvatar());
         msgView.setBackgroundColor(msg.getColor());
 
-        Log.v("keash", "set bg color to " + msg.getColor());
         return msgView;
     }
 }
