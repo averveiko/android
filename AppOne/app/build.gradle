@@ -48,4 +48,10 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
     // Для удобной работы с json
     implementation 'com.google.code.gson:gson:2.8.6'
+    // recycler view support
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    // Загрузка картинок из интернета
+    implementation 'com.squareup.picasso:picasso:2.8'
+
+
 }

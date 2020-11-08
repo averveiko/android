@@ -1,22 +1,26 @@
 package ru.averveyko.appone
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ListView
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var vListView: ListView
+    lateinit var vRecView: RecyclerView
     var request: Disposable? = null
 
     // Создание активити - тут обычно рисуют UI
@@ -24,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        vListView = findViewById(R.id.act1_listView)
+        vRecView = findViewById(R.id.act1_recView)
 
         // Обращение в сеть в отдельном потоке
         val o =
@@ -47,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
             // Вывести список на вьюху
             //showLinearLayout(it.items)
-            showListView(it.items)
+            showRecView(it.items)
         }, {
             // Если произошла ошибка будет выполнена эта лямбда
             Log.e("tag", "", it)
@@ -62,9 +66,19 @@ class MainActivity : AppCompatActivity() {
     intent.putExtra("txt", vTextView.text)
     startActivityForResult(intent, 0);
 }*/
-    fun showListView(feedList: List<FeedItem>) {
+    /*fun showListView(feedList: List<FeedItem>) {
         val adapter = Adapter(feedList)
-        vListView.adapter = adapter
+        vRecView.adapter = adapter
+    }*/
+
+    fun showRecView(feedList: List<FeedItem>) {
+        vRecView.adapter = RecAdapter(feedList)
+        // Нужно явно указать как отображать RecyclerView
+        vRecView.layoutManager = LinearLayoutManager(this)
+        // Добавить красивости к айтему
+        //vRecView.addItemDecoration()
+        // Анимации
+        //vRecView.animation
     }
 
     // Показать фиды в виде списка на вьюхе
@@ -127,7 +141,50 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class Adapter(val items: List<FeedItem>) : BaseAdapter() {
+class RecAdapter(val items: List<FeedItem>): RecyclerView.Adapter<RecHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecHolder {
+        val inflater = LayoutInflater.from(parent!!.context)
+
+        val view = inflater.inflate(R.layout.list_item, parent, false)
+
+        return RecHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: RecHolder, position: Int) {
+        val item = items[position]
+        holder?.bind(item)
+    }
+
+    override fun getItemCount(): Int {
+        return items.size
+    }
+
+}
+
+class RecHolder(view: View): RecyclerView.ViewHolder(view) {
+    fun bind(item: FeedItem) {
+        val title = itemView.findViewById<TextView>(R.id.item_title)
+        val desc = itemView.findViewById<TextView>(R.id.item_desc)
+        val thumb = itemView.findViewById<ImageView>(R.id.item_thumb)
+        title.text = item.title;
+        desc.text = item.description;
+
+        // Сейчас фид возвращает пустые item.thumbnail, используем рандомную демо-картинку
+        val demoURL = "https://images.chesscomfiles.com/uploads/v1/user/19137822.b588af1e.1200x1200o.071ba55cf9bc.jpeg"
+        Picasso.get().load(demoURL).into(thumb)
+
+        // Добавим обработку нажатия
+        itemView.setOnClickListener {
+            // Открыть в бразуере
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(item.link)
+            // У нас нет активити для просмотра URI, попросим систему найти такой
+            thumb.context.startActivity(intent)
+        }
+    }
+}
+
+/*class Adapter(val items: List<FeedItem>) : BaseAdapter() {
     override fun getCount(): Int {
         return items.size
     }
@@ -153,8 +210,7 @@ class Adapter(val items: List<FeedItem>) : BaseAdapter() {
 
         return view
     }
-
-}
+}*/
 
 class Feed(
     val items: ArrayList<FeedItem>
