@@ -17,6 +17,9 @@ import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.realm.Realm
+import io.realm.RealmList
+import io.realm.RealmObject
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             createRequest("https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.bbci.co.uk%2Fnews%2Frss.xml")
                 .map {
                     // Преобразовать json в объект
-                    Gson().fromJson(it, Feed::class.java)
+                    Gson().fromJson(it, FeedApi::class.java)
                 }
                 // Выполнить в потоке io
                 .subscribeOn(Schedulers.io())
@@ -45,16 +48,43 @@ class MainActivity : AppCompatActivity() {
         // Запустить выполнение
         request = o.subscribe({
             // Если все ок, в этой лямбде будут обработаны результаты
-            for (item in it.items) {
-                // Вывод в лог
-                Log.v("tag", "title: ${item.title}")
+
+            val feed = Feed(
+                it.items
+                    .mapTo(
+                        RealmList<FeedItem>(),
+                        { feed ->
+                            FeedItem(
+                                feed.title,
+                                feed.link,
+                                feed.thumbnail,
+                                feed.description
+                            )
+                        }
+                    ))
+
+            // Сохраняем в базу весь полученный feed
+            Realm.getDefaultInstance().executeTransaction { realm ->
+
+                // Для начала удалим старое
+                val oldList = realm.where(Feed::class.java).findAll()
+                if (oldList.size > 0) {
+                    for (item in oldList) {
+                        item.deleteFromRealm()
+                    }
+                }
+                // теперь запишем новое
+                realm.copyToRealm(feed)
             }
             // Вывести список на вьюху
             //showLinearLayout(it.items)
-            showRecView(it.items)
+            showRecView()
+
         }, {
             // Если произошла ошибка будет выполнена эта лямбда
             Log.e("tag", "", it)
+            // Если пропал например интернет - попробуем из базы загрузить
+            showRecView()
         })
     }
 
@@ -71,77 +101,83 @@ class MainActivity : AppCompatActivity() {
         vRecView.adapter = adapter
     }*/
 
-    fun showRecView(feedList: List<FeedItem>) {
-        vRecView.adapter = RecAdapter(feedList)
-        // Нужно явно указать как отображать RecyclerView
-        vRecView.layoutManager = LinearLayoutManager(this)
-        // Добавить красивости к айтему
-        //vRecView.addItemDecoration()
-        // Анимации
-        //vRecView.animation
+    fun showRecView() {
+
+        Realm.getDefaultInstance().executeTransaction { realm ->
+            val feedList = realm.where(Feed::class.java).findAll()
+            if (feedList.size > 0) {
+                vRecView.adapter = RecAdapter(feedList[0]!!.items)
+                // Нужно явно указать как отображать RecyclerView
+                vRecView.layoutManager = LinearLayoutManager(this)
+                // Добавить красивости к айтему
+                //vRecView.addItemDecoration()
+                // Анимации
+                //vRecView.animation
+        }
     }
+}
 
-    // Показать фиды в виде списка на вьюхе
-    /*fun showLinearLayout(feedList: List<FeedItem>) {
-        val inflater = layoutInflater
+// Показать фиды в виде списка на вьюхе
+/*fun showLinearLayout(feedList: List<FeedItem>) {
+    val inflater = layoutInflater
 
-        for (feedItem in feedList) {
-            val view = inflater.inflate(R.layout.list_item, vList, false)
-            val title = view.findViewById<TextView>(R.id.item_title)
-            title.setText(feedItem.title)
-            vList.addView(view)
-        }
-    }*/
+    for (feedItem in feedList) {
+        val view = inflater.inflate(R.layout.list_item, vList, false)
+        val title = view.findViewById<TextView>(R.id.item_title)
+        title.setText(feedItem.title)
+        vList.addView(view)
+    }
+}*/
 
-    // Получение результата из вызванной дочерней активити
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (data != null) {
-            val text = data.getStringExtra("txt")
-            // или сделать переменной класса, чтобы повторно не искать
-            val vTextView = findViewById<TextView>(R.id.act1_text)
-            vTextView.text = text
-        }
-    }*/
+// Получение результата из вызванной дочерней активити
+/*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (data != null) {
+        val text = data.getStringExtra("txt")
+        // или сделать переменной класса, чтобы повторно не искать
+        val vTextView = findViewById<TextView>(R.id.act1_text)
+        vTextView.text = text
+    }
+}*/
 
-    // Экран стал виден пользователю. Не нужен особо.
+// Экран стал виден пользователю. Не нужен особо.
 // Только для случая с разделением экрана на 2 приложения.
-    override fun onStart() {
-        super.onStart()
-    }
+override fun onStart() {
+    super.onStart()
+}
 
-    // Экран стал активен. Он работает.
+// Экран стал активен. Он работает.
 // Тут можно запускать анимацию, все внутренние процессы
-    override fun onResume() {
-        super.onResume()
-    }
+override fun onResume() {
+    super.onResume()
+}
 
-    // Юзер прекратил работу с экраном - нажал home, back или зазвонит телефон
+// Юзер прекратил работу с экраном - нажал home, back или зазвонит телефон
 // Надо остановить все что мы запустили в onResume. Также после этого система может молча убить
 // все приложение
-    override fun onPause() {
-        super.onPause()
-    }
+override fun onPause() {
+    super.onPause()
+}
 
-    // Симметричный к onStart, редко используется, т.к. есть onPause
-    override fun onStop() {
-        super.onStop()
-    }
+// Симметричный к onStart, редко используется, т.к. есть onPause
+override fun onStop() {
+    super.onStop()
+}
 
 /*
  * После того, как юзер ответил на звонок, вернулся к нашему приложению, будет снова выполнены:
  * onStart, onResume .. Также есть бесполезный onRestart
  */
 
-    // Последнее что может быть вызвано у Активити
-    override fun onDestroy() {
-        // Прервать выполнение запроса в сеть (для освобождения памяти)
-        request?.dispose()
-        super.onDestroy()
-    }
+// Последнее что может быть вызвано у Активити
+override fun onDestroy() {
+    // Прервать выполнение запроса в сеть (для освобождения памяти)
+    request?.dispose()
+    super.onDestroy()
+}
 }
 
-class RecAdapter(val items: List<FeedItem>): RecyclerView.Adapter<RecHolder>() {
+class RecAdapter(val itemApis: List<FeedItem>) : RecyclerView.Adapter<RecHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecHolder {
         val inflater = LayoutInflater.from(parent!!.context)
 
@@ -151,33 +187,34 @@ class RecAdapter(val items: List<FeedItem>): RecyclerView.Adapter<RecHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecHolder, position: Int) {
-        val item = items[position]
+        val item = itemApis[position]
         holder?.bind(item)
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return itemApis.size
     }
 
 }
 
-class RecHolder(view: View): RecyclerView.ViewHolder(view) {
-    fun bind(item: FeedItem) {
+class RecHolder(view: View) : RecyclerView.ViewHolder(view) {
+    fun bind(itemApi: FeedItem) {
         val title = itemView.findViewById<TextView>(R.id.item_title)
         val desc = itemView.findViewById<TextView>(R.id.item_desc)
         val thumb = itemView.findViewById<ImageView>(R.id.item_thumb)
-        title.text = item.title;
-        desc.text = item.description;
+        title.text = itemApi.title;
+        desc.text = itemApi.description;
 
         // Сейчас фид возвращает пустые item.thumbnail, используем рандомную демо-картинку
-        val demoURL = "https://images.chesscomfiles.com/uploads/v1/user/19137822.b588af1e.1200x1200o.071ba55cf9bc.jpeg"
+        val demoURL =
+            "https://images.chesscomfiles.com/uploads/v1/user/19137822.b588af1e.1200x1200o.071ba55cf9bc.jpeg"
         Picasso.get().load(demoURL).into(thumb)
 
         // Добавим обработку нажатия
         itemView.setOnClickListener {
             // Открыть в бразуере
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(item.link)
+            intent.data = Uri.parse(itemApi.link)
             // У нас нет активити для просмотра URI, попросим систему найти такой
             thumb.context.startActivity(intent)
         }
@@ -212,16 +249,29 @@ class RecHolder(view: View): RecyclerView.ViewHolder(view) {
     }
 }*/
 
-class Feed(
-    val items: ArrayList<FeedItem>
+// Классы для загрузки из API
+class FeedApi(
+    val items: ArrayList<FeedItemApi>
 )
 
-class FeedItem(
+class FeedItemApi(
     val title: String,
     val link: String,
     val thumbnail: String,
     val description: String
 )
+
+// Классы для сохранения в БД
+open class Feed(
+    var items: RealmList<FeedItem> = RealmList<FeedItem>()
+) : RealmObject()
+
+open class FeedItem(
+    var title: String = "",
+    var link: String = "",
+    var thumbnail: String = "",
+    var description: String = ""
+) : RealmObject()
 
 /*
 "items": [
