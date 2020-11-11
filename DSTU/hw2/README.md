@@ -8,10 +8,17 @@
 Скриншоты выполненного задания:
 
 Главное activity
+
 ![Main screen](scr/scr_main.png)
+
 При попытке отправить пустой текст
+
 ![Error message](scr/scr_err.png)
+
 Второе activity
+
 ![Second screen](scr/scr_second.png)
+
 Поделиться
+
 ![Share screen](scr/scr_share.png)
