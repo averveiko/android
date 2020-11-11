@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">DSTU</string>
+    <string name="str_put_msg_text">Введите текст сообщения</string>
+    <string name="str_send_msg">ОТПРАВИТЬ</string>
+    <string name="str_share">ПОДЕЛИТЬСЯ</string>
+    <string name="str_msg_text">Текст сообщения</string>
+    <string name="str_put_msg_txt_err">Введите текст сообщения</string>
+</resources>
