@@ -1,0 +1,8 @@
+<resources>
+    <item name="layout_id" type="id" />
+    <item name="text_view_id" type="id" />
+    <string name="app_name">Книжный каталог</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
