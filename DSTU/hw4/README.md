@@ -9,28 +9,28 @@
 
 Главное activity
 
-![Main screen](scr/scr_00.png)
+![Main screen](scr/scr00.png)
 
 Просмотр детальной информации
 
-![Main screen](scr/scr_01.png)
+![Main screen](scr/scr01.png)
 
 Добавляем книгу в корзину
 
-![Error message](scr/scr_02.png)
+![Error message](scr/scr02.png)
 
 Просмотр корзины
 
-![Second screen](scr/scr_03.png)
+![Second screen](scr/scr03.png)
 
 Ландшафтная ориентация
 
-![Share screen](scr/scr_04.png)
+![Share screen](scr/scr04.png)
 
 Удаляем книгу из корзины
 
-![Share screen](scr/scr_05.png)
+![Share screen](scr/scr05.png)
 
 Просмотр корзины
 
-![Second screen](scr/scr_06.png)
+![Second screen](scr/scr06.png)
