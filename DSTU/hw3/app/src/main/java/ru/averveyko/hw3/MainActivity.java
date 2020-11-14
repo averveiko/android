@@ -78,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
         if (isRunning) {
             stopChronometer(SystemClock.elapsedRealtime() - chronometer.getBase());
         }
+        super.onPause();
     }
 
     @Override
