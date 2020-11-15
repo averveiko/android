@@ -34,18 +34,17 @@ public class MainActivity extends AppCompatActivity {
         vRecView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public boolean removeTask(Task task, int position) {
-        if (taskRepository.removeTask(task)) {
+    public void removeTask(int position) {
+        taskRepository.removeTask(position);
+        if (vRecView.getAdapter() != null) {
             vRecView.getAdapter().notifyItemRemoved(position);
-            return true;
         }
-        return false;
     }
 }
 
 class RecAdapter extends RecyclerView.Adapter<RecHolder> {
 
-    private List<Task> tasks;
+    private final List<Task> tasks;
 
     public RecAdapter(List<Task> tasks) {
         this.tasks = tasks;
@@ -95,8 +94,7 @@ class RecHolder extends RecyclerView.ViewHolder {
         date.setText(task.getFormattedDate());
 
         CheckBox cb = itemView.findViewById(R.id.cb_task);
-        cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            ((MainActivity)cardView.getContext()).removeTask(task, getAdapterPosition());
-        });
+        cb.setOnCheckedChangeListener((buttonView, isChecked) ->
+                ((MainActivity) cardView.getContext()).removeTask(getAdapterPosition()));
     }
 }

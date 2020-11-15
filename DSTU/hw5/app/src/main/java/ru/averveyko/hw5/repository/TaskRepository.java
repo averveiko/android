@@ -22,8 +22,8 @@ public class TaskRepository {
         return instance;
     }
 
-    public boolean removeTask(Task task) {
-        return tasks.remove(task);
+    public void removeTask(int id) {
+        tasks.remove(id);
     }
 
     public List<Task> getTasks() {
