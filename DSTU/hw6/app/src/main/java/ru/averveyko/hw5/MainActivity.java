@@ -1,5 +1,8 @@
 package ru.averveyko.hw5;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +17,16 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.text.SimpleDateFormat;
 
 import ru.averveyko.hw5.domain.Task;
 import ru.averveyko.hw5.repository.TaskRepository;
+import ru.averveyko.hw5.sqlite.TasksDataBaseHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final TaskRepository taskRepository = TaskRepository.getInstance();
+    private final SQLiteOpenHelper dataBaseHelper = new TasksDataBaseHelper(this);
+    private TaskRepository taskRepository;
     private RecyclerView vRecView;
 
     @Override
@@ -29,13 +34,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.taskRepository = TaskRepository.getInstance(dataBaseHelper);
+
+//        SQLiteDatabase writableDatabase = dataBaseHelper.getWritableDatabase();
+//        insert(writableDatabase);
+//        writableDatabase.close();
+
+        //clearDB();
+
         vRecView = findViewById(R.id.act1_rec_view);
-        vRecView.setAdapter(new RecAdapter(taskRepository.getTasks()));
+        vRecView.setAdapter(new RecAdapter(taskRepository));
         vRecView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public void removeTask(int position) {
-        taskRepository.removeTask(position);
+    private void clearDB() {
+        SQLiteDatabase writableDatabase = dataBaseHelper.getWritableDatabase();
+        writableDatabase.execSQL("delete from TASK");
+        writableDatabase.close();
+    }
+
+    private void insert(SQLiteDatabase db) {
+        insertDemoTasks(db, "task1", "task1 descr", new java.util.Date());
+        insertDemoTasks(db, "task2", "task2 descr", new java.util.Date());
+    }
+
+    private void insertDemoTasks(SQLiteDatabase db, String title, String description, java.util.Date date) {
+        ContentValues taskValues = new ContentValues();
+        taskValues.put("TITLE", title);
+        taskValues.put("DESCRIPTION", description);
+        // need JDBC date escape format yyyy-[m]m-[d]d
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+        taskValues.put("DATE", DATE_FORMAT.format(date));
+
+        db.insert("TASK", null, taskValues);
+    }
+
+    public void removeTask(int taskId, int position) {
+        taskRepository.removeTask(taskId);
+
         if (vRecView.getAdapter() != null) {
             vRecView.getAdapter().notifyItemRemoved(position);
         }
@@ -44,10 +80,10 @@ public class MainActivity extends AppCompatActivity {
 
 class RecAdapter extends RecyclerView.Adapter<RecHolder> {
 
-    private final List<Task> tasks;
+    private final TaskRepository taskRepository;
 
-    public RecAdapter(List<Task> tasks) {
-        this.tasks = tasks;
+    public RecAdapter(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
 
     @NonNull
@@ -61,12 +97,12 @@ class RecAdapter extends RecyclerView.Adapter<RecHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecHolder holder, int position) {
-        holder.bind(this.tasks.get(position));
+        holder.bind(this.taskRepository.getTask(position));
     }
 
     @Override
     public int getItemCount() {
-        return tasks.size();
+        return taskRepository.getTasksCount();
     }
 }
 
@@ -95,6 +131,6 @@ class RecHolder extends RecyclerView.ViewHolder {
 
         CheckBox cb = itemView.findViewById(R.id.cb_task);
         cb.setOnCheckedChangeListener((buttonView, isChecked) ->
-                ((MainActivity) cardView.getContext()).removeTask(getAdapterPosition()));
+                ((MainActivity) cardView.getContext()).removeTask(task.getId(), getAdapterPosition()));
     }
 }
