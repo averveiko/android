@@ -32,8 +32,8 @@ public class TaskRepository {
 
     public void addDemoTasks() {
         tasks.clear();
-        tasks.add(new Task("task one one one one one one one one one one one one one one one ", "task one descr", new Date()));
-        tasks.add(new Task("task two", "task one two", new Date()));
-        tasks.add(new Task("task three", "task one three", new Date()));
+        tasks.add(new Task("Вынести мусор", "Собрать мусор в мусорное ведро и утилизировать", new Date()));
+        tasks.add(new Task("Купить продукты", "Сходить в пятерочку и купить хлеба и молока", new Date()));
+        tasks.add(new Task("Сделать домашку", "Сделать самостоятельные практические работы по курсу Android разработки", new Date()));
     }
 }
