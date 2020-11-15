@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Objects;
 
 public class Task {
+
     private final int id;
     private final String title;
     private final String description;
@@ -33,9 +34,8 @@ public class Task {
         return date;
     }
 
-    public String getFormattedDate() {
-        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
-        return DATE_FORMAT.format(date);
+    public String getFormattedDate(SimpleDateFormat dateFormat) {
+        return dateFormat.format(date);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package ru.averveyko.hw5;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +12,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import ru.averveyko.hw5.domain.Task;
 import ru.averveyko.hw5.repository.TaskRepository;
 import ru.averveyko.hw5.sqlite.TasksDataBaseHelper;
 
 public class MainActivity extends AppCompatActivity {
+
+    static final int REQUEST_CODE = 0;
+    public static final String LOG_TAG = "TASKMGR";
+    public static final String EXTRA_DATE = "DATE";
+    public static final String EXTRA_TITLE = "TITLE";
+    public static final String EXTRA_DESCRIPTION = "DESCRIPTION";
+    public static SimpleDateFormat HUMAN_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
     private final SQLiteOpenHelper dataBaseHelper = new TasksDataBaseHelper(this);
     private TaskRepository taskRepository;
@@ -36,37 +48,43 @@ public class MainActivity extends AppCompatActivity {
 
         this.taskRepository = TaskRepository.getInstance(dataBaseHelper);
 
-//        SQLiteDatabase writableDatabase = dataBaseHelper.getWritableDatabase();
-//        insert(writableDatabase);
-//        writableDatabase.close();
-
-        //clearDB();
+        FloatingActionButton fabAddTask = findViewById(R.id.fab_add_task);
+        fabAddTask.setOnClickListener(v -> {
+            Intent intent = new Intent(fabAddTask.getContext(), AddTaskActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        });
 
         vRecView = findViewById(R.id.act1_rec_view);
         vRecView.setAdapter(new RecAdapter(taskRepository));
         vRecView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void clearDB() {
-        SQLiteDatabase writableDatabase = dataBaseHelper.getWritableDatabase();
-        writableDatabase.execSQL("delete from TASK");
-        writableDatabase.close();
-    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    Date date = null;
+                    try {
+                        date = HUMAN_DATE_FORMAT.parse(data.getStringExtra(EXTRA_DATE));
+                    } catch (ParseException e) {
+                        Log.e(LOG_TAG, "Некорректный формат даты (требуется dd.MM.yyyy)");
+                    }
 
-    private void insert(SQLiteDatabase db) {
-        insertDemoTasks(db, "task1", "task1 descr", new java.util.Date());
-        insertDemoTasks(db, "task2", "task2 descr", new java.util.Date());
-    }
-
-    private void insertDemoTasks(SQLiteDatabase db, String title, String description, java.util.Date date) {
-        ContentValues taskValues = new ContentValues();
-        taskValues.put("TITLE", title);
-        taskValues.put("DESCRIPTION", description);
-        // need JDBC date escape format yyyy-[m]m-[d]d
-        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-        taskValues.put("DATE", DATE_FORMAT.format(date));
-
-        db.insert("TASK", null, taskValues);
+                    Task task = new Task(
+                            0,
+                            data.getStringExtra(EXTRA_TITLE),
+                            data.getStringExtra(EXTRA_DESCRIPTION),
+                            date
+                    );
+                    taskRepository.addTask(task);
+                    if (vRecView.getAdapter() != null) {
+                        vRecView.getAdapter().notifyDataSetChanged();
+                    }
+                }
+            }
+        }
     }
 
     public void removeTask(int taskId, int position) {
@@ -100,6 +118,7 @@ class RecAdapter extends RecyclerView.Adapter<RecHolder> {
         holder.bind(this.taskRepository.getTask(position));
     }
 
+
     @Override
     public int getItemCount() {
         return taskRepository.getTasksCount();
@@ -118,7 +137,7 @@ class RecHolder extends RecyclerView.ViewHolder {
             // show Toast with detail
             Toast.makeText(
                     itemView.getContext(),
-                    task.getFormattedDate() + ": " + task.getTitle() + ". " + task.getDescription(),
+                    task.getFormattedDate(MainActivity.HUMAN_DATE_FORMAT) + ": " + task.getTitle() + ". " + task.getDescription(),
                     Toast.LENGTH_LONG
             ).show();
         });
@@ -127,10 +146,12 @@ class RecHolder extends RecyclerView.ViewHolder {
         title.setText(task.getTitle());
 
         TextView date = itemView.findViewById(R.id.item_date);
-        date.setText(task.getFormattedDate());
+        date.setText(task.getFormattedDate(MainActivity.HUMAN_DATE_FORMAT));
 
         CheckBox cb = itemView.findViewById(R.id.cb_task);
-        cb.setOnCheckedChangeListener((buttonView, isChecked) ->
-                ((MainActivity) cardView.getContext()).removeTask(task.getId(), getAdapterPosition()));
+        cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                ((MainActivity) cardView.getContext()).removeTask(task.getId(), getAdapterPosition());
+                cb.setChecked(false);
+        });
     }
 }
