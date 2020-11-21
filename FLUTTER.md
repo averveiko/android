@@ -1,7 +1,10 @@
+п»ї```Dart
 final TextStyle _biggerFont = TextStyle(fontSize: 18.0);
 Text(pair.asPascalCase, style: _biggerFont)
+```
 ------------------
-Пример простого списка:
+РџСЂРёРјРµСЂ РїСЂРѕСЃС‚РѕРіРѕ СЃРїРёСЃРєР°:
+```Dart
 class ToDoList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -22,11 +25,12 @@ class ToDoList extends StatelessWidget {
   }
 
   Widget _buildRow(int i) {
-    // Всего 29 элементов (включая разделители)
+    // Р’СЃРµРіРѕ 29 СЌР»РµРјРµРЅС‚РѕРІ (РІРєР»СЋС‡Р°СЏ СЂР°Р·РґРµР»РёС‚РµР»Рё)
     if (i == 30) return null;
     return ListTile(
       title: Text('Item $i', style: TextStyle(fontSize: 18.0)),
     );
   }
 }
+```
 ------------------
