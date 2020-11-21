@@ -33,7 +33,8 @@ class ToDoList extends StatelessWidget {
       title: Text('Item $i', style: TextStyle(fontSize: 18.0)),
     );
   }
-}```
+}
+```
 Или так (наверно правильнее):
 ```Dart
 class DemoList extends StatelessWidget {
@@ -62,3 +63,5 @@ class DemoList extends StatelessWidget {
 }
 ```
 ------------------
+
+Column(children: <Widget>[]) - позволяет разположить детей друг под другом
