@@ -1,5 +1,6 @@
 package ru.averveyko.appone
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -119,6 +120,13 @@ class MainActivity : AppCompatActivity() {
                 .addToBackStack("main") // Это позволит обработать кнопку back
                 .commitAllowingStateLoss()
         }
+    }
+
+    fun playMusic(guid: String) {
+        // Запустить сервис и передать url
+        val intent = Intent(this, PlayService::class.java)
+        intent.putExtra("mp3", guid)
+        startService(intent)
     }
 }
 

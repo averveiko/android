@@ -1,6 +1,7 @@
 package ru.averveyko.appone
 
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -45,7 +46,8 @@ class MainFragment : Fragment() {
 
         // Обращение в сеть в отдельном потоке
         val o =
-            createRequest("https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.bbci.co.uk%2Fnews%2Frss.xml")
+            // "https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.bbci.co.uk%2Fnews%2Frss.xml"
+            createRequest("https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.twit.tv%2Fbrickhouse.xml")
                 .map {
                     // Преобразовать json в объект
                     Gson().fromJson(it, FeedApi::class.java)
@@ -68,7 +70,8 @@ class MainFragment : Fragment() {
                                 feed.title,
                                 feed.link,
                                 feed.thumbnail,
-                                feed.description
+                                feed.description,
+                                feed.guid
                             )
                         }
                     ))
@@ -150,12 +153,12 @@ class RecHolder(view: View) : RecyclerView.ViewHolder(view) {
         val desc = itemView.findViewById<TextView>(R.id.item_desc)
         val thumb = itemView.findViewById<ImageView>(R.id.item_thumb)
         title.text = itemApi.title;
-        desc.text = itemApi.description;
+        desc.text = Html.fromHtml(itemApi.description);
 
-        // Сейчас фид возвращает пустые item.thumbnail, используем рандомную демо-картинку
+        // Сейчас фид возвращает пустые itemApi.thumbnail, используем рандомную демо-картинку
         val demoURL =
             "https://images.chesscomfiles.com/uploads/v1/user/19137822.b588af1e.1200x1200o.071ba55cf9bc.jpeg"
-        Picasso.get().load(demoURL).into(thumb)
+        Picasso.get().load(itemApi.thumbnail).into(thumb)
 
         // Добавим обработку нажатия
         /*itemView.setOnClickListener {
@@ -167,7 +170,8 @@ class RecHolder(view: View) : RecyclerView.ViewHolder(view) {
         }*/
 
         itemView.setOnClickListener {
-            (thumb.context as MainActivity).showArticle(itemApi.link)
+            //(thumb.context as MainActivity).showArticle(itemApi.link)
+            (thumb.context as MainActivity).playMusic(itemApi.guid)
         }
     }
 }
@@ -181,7 +185,8 @@ class FeedItemApi(
     val title: String,
     val link: String,
     val thumbnail: String,
-    val description: String
+    val description: String,
+    val guid: String
 )
 
 // Классы для сохранения в БД
@@ -193,5 +198,6 @@ open class FeedItem(
     var title: String = "",
     var link: String = "",
     var thumbnail: String = "",
-    var description: String = ""
+    var description: String = "",
+    var guid: String = ""
 ) : RealmObject()
