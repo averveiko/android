@@ -6,36 +6,41 @@ Text(pair.asPascalCase, style: _biggerFont)
 ```
 ------------------
 Пример простого списка:
+
+Можно просто готовый список элементов передать (если список небольшой)
 ```Dart
-class ToDoList extends StatelessWidget {
+ return ListView(children: []);
+```
+```Dart
+class ListViewBuilderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('My simple list view')),
-      body: _buildListView(),
-    );
-  }
-
-  ListView _buildListView() {
     return ListView.builder(
-      padding: EdgeInsets.all(16.0),
-      itemBuilder: (context, i) {
-        if (i.isOdd) return Divider();
-        return _buildRow(i);
-      },
-    );
-  }
-
-  Widget _buildRow(int i) {
-    // Всего 29 элементов (включая разделители)
-    if (i == 30) return null;
-    return ListTile(
-      title: Text('Item $i', style: TextStyle(fontSize: 18.0)),
+        itemCount: 20, // Не обязательно, можно бесконечный ленивый список
+        itemBuilder: (context, index) {
+          return TextWidget(text: '$index');
+        }
     );
   }
 }
 ```
-Или так (наверно правильнее):
+Или так (сепарированный):
+```Dart
+class ListViewSeparatedWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+        itemBuilder: (context, index) {
+          return TextWidget(text: '$index');
+        },
+        separatorBuilder: (context, index) {
+          return Divider(color: Colors.black);
+        },
+        itemCount: 20);
+  }
+}
+```
+Или так:
 ```Dart
 class DemoList extends StatelessWidget {
   final TextStyle _biggerFont = TextStyle(fontSize: 18.0);
@@ -62,6 +67,10 @@ class DemoList extends StatelessWidget {
   }
 }
 ```
+Есть еще конструктор ListView.custom - если надо - гугли
 ------------------
 
-Column(children: <Widget>[]) - позволяет разположить детей друг под другом
+* Column(children: <Widget>[]) - позволяет разположить детей вертикально друг под другом (столбец). По дефолту выравниваются относительно центра друг друга.
+* Row(children: <Widget>[]) - позволяет разположить детей горизонтально
+
+* RaisedButton(onPressed (){}, child: Text('press me'))
