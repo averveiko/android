@@ -1,29 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:grid_view_app/widgets.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text('ListView widget'),
-          ),
-          body: GridViewExtentWidget(),
-        ));
-  }
-}
+import 'package:grid_view_app/text_view_widget.dart';
 
 /*
    Также есть вариант custom, если нужен - гуглить
  */
-
 class GridViewExtentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -76,7 +56,7 @@ class GridViewBuilderWidget extends StatelessWidget {
     return GridView.builder(
         itemCount: 10,
         gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (context, index) {
           return TextWidget(text: '$index');
         });
@@ -88,8 +68,8 @@ class GridViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView(
       gridDelegate:
-          // Фиксированное кол-во столбцов
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+      // Фиксированное кол-во столбцов
+      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
       children: [
         TextWidget(text: "1"),
         TextWidget(text: "2"),
