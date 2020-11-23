@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // задать шрифт всей теме
+        // задать шрифт всей теме
         theme: ThemeData(fontFamily: 'NerkoOne'),
         title: 'Flutter Demo',
         home: Scaffold(
@@ -18,8 +19,44 @@ class MyApp extends StatelessWidget {
           //body: Example(),
           //body: StackWidget(),
           //body: IndexedStackWidget(),
-          body: FontWidget(),
+          //body: FontWidget(),
+          body: ImageWidget(),
         ));
+  }
+}
+
+class ImageWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final String assetNameJpg = 'assets/images/bali.jpg';
+    final String assetNameSvg = 'assets/weather.svg';
+    final String assetNameUrl =
+        'https://cdn3.iconfinder.com/data/icons/spring-2-1/30/Rainbow-128.png';
+
+    AssetImage imageFromassetImage = AssetImage(assetNameJpg);
+    Image imageFromAsset = Image.asset(assetNameJpg, fit: BoxFit.cover);
+
+    Image imageFromNetwork = Image.network(assetNameUrl);
+
+    Image changedImage = Image(
+      image: imageFromNetwork.image,
+      color: Colors.green,
+      colorBlendMode: BlendMode.color,
+    );
+
+    SvgPicture svgPicture = SvgPicture.asset(assetNameSvg, fit: BoxFit.none,);
+
+    return Container(
+      constraints: BoxConstraints.expand(height: double.infinity),
+      /*child: Image(
+        image: imageFromassetImage,
+        fit: BoxFit.cover,
+      ),*/
+      //child: imageFromAsset,
+      //child: imageFromNetwork,
+      //child: changedImage,
+      child: svgPicture,
+    );
   }
 }
 
@@ -56,15 +93,10 @@ class FontWidget extends StatelessWidget {
             ),
           ),
           // Этот не из ресурсов а из пакета google_fonts (смотри pubspec.yaml)
-          Text(
-            'Google font',
-            style: GoogleFonts.lato(
-              textStyle: TextStyle(
-                fontStyle: FontStyle.italic,
-                fontSize: 30
-              )
-            )
-          ),
+          Text('Google font',
+              style: GoogleFonts.lato(
+                  textStyle:
+                      TextStyle(fontStyle: FontStyle.italic, fontSize: 30))),
         ],
       ),
     );

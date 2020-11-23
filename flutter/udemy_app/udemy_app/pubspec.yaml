@@ -27,6 +27,11 @@ dependencies:
   # Зависимость на пакет шрифтов (если не хотим ручками копировать)
   google_fonts: ^1.1.1
 
+  # Зависимость для отображения svg
+  flutter_svg: ^0.19.1
+
+
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
