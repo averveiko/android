@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,13 +10,64 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // задать шрифт всей теме
+        theme: ThemeData(fontFamily: 'NerkoOne'),
         title: 'Flutter Demo',
         home: Scaffold(
           appBar: AppBar(title: Text('Udemy example')),
           //body: Example(),
           //body: StackWidget(),
-          body: IndexedStackWidget(),
+          //body: IndexedStackWidget(),
+          body: FontWidget(),
         ));
+  }
+}
+
+class FontWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'NerkoOne font',
+            style: TextStyle(
+              fontFamily: 'NerkoOne',
+              fontWeight: FontWeight.w100,
+              fontSize: 30,
+            ),
+          ),
+          Text(
+            'Goldman font',
+            style: TextStyle(
+              fontFamily: 'Goldman',
+              fontWeight: FontWeight.w500,
+              fontSize: 30,
+            ),
+          ),
+          Text(
+            'BigShouldersStencilDisplay font',
+            style: TextStyle(
+              fontFamily: 'BigShouldersStencilDisplay',
+              fontWeight: FontWeight.w500,
+              fontSize: 30,
+            ),
+          ),
+          // Этот не из ресурсов а из пакета google_fonts (смотри pubspec.yaml)
+          Text(
+            'Google font',
+            style: GoogleFonts.lato(
+              textStyle: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontSize: 30
+              )
+            )
+          ),
+        ],
+      ),
+    );
   }
 }
 
