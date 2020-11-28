@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'hw2.dart';
+
 void main() {
-  runApp(MainWidget());
+  //runApp(MainWidget());
+  runApp(CounterWidget()); // Домашнее задание с счетчиком
 }
 
 class MainWidget extends StatefulWidget {
@@ -26,9 +29,11 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(fontFamily: 'SansitaSwashed'),
       home: Scaffold(
           appBar: AppBar(
-            title: Text("My First App"),
+            leading: Icon(Icons.terrain_outlined),
+            title: Text("My First App",),
             centerTitle: true,
           ),
           floatingActionButton: FloatingActionButton(
@@ -41,32 +46,43 @@ class _MainWidgetState extends State<MainWidget> {
             },
           ),
           body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/bg_image.png'),
+                  fit: BoxFit.cover),
+            ),
             padding: EdgeInsets.all(16),
             child: _loading
                 ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                LinearProgressIndicator(
-                  value: _progress,
-                ),
-                Text(
-                  "${(_progress * 100).round()} %",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.indigo),
-                ),
-              ],
-            )
-                : Center(
-              child: Text(
-                "Press the button",
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.indigo),
-              ),
-            ),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      LinearProgressIndicator(
+                        value: _progress,
+                      ),
+                      Text(
+                        "${(_progress * 100).round()} %",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.indigo),
+                      ),
+                    ],
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                        Text(
+                          "Press the button",
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.indigo),
+                        ),
+                        // Или укороченно так: Image.asset(name)
+                        Image(
+                            width: double.infinity,
+                            image: AssetImage('assets/icons/cloud_icon.png')),
+                      ]),
           )), /**/
     );
   }
