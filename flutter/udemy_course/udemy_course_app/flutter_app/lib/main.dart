@@ -3,10 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'hw2.dart';
+import 'hw3.dart';
+import 'layouts.dart';
+import 'list_view.dart';
 
 void main() {
   //runApp(MainWidget());
-  runApp(CounterWidget()); // Домашнее задание с счетчиком
+  //runApp(CounterWidget()); // Домашнее задание с счетчиком
+  //runApp(LayoutExampleWidget()); // Пример использования layout виджетов
+  //runApp(ListViewExampleWidget()); // Пример использования ListView
+  runApp(WeatherMainScreen()); // Домашнее задание - верстка погодного приложения
 }
 
 class MainWidget extends StatefulWidget {
