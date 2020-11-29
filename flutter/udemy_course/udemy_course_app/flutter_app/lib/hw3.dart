@@ -33,20 +33,23 @@ class WeatherWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: double.infinity, // Внешний контейнер бесконечной высоты
         padding: EdgeInsets.all(10),
         color: bgColor,
-        child: Column(
-          children: [
-            SearchBar(),
-            SizedBox(height: 50),
-            CityInfo(),
-            SizedBox(height: 50),
-            WeatherInfo(),
-            SizedBox(height: 50),
-            AdditionalInfo(),
-            SizedBox(height: 50),
-            Forecast(),
-          ],
+        child: SingleChildScrollView( // а скрол уже внутри
+          child: Column(
+            children: [
+              SearchBar(),
+              SizedBox(height: 50),
+              CityInfo(),
+              SizedBox(height: 50),
+              WeatherInfo(),
+              SizedBox(height: 50),
+              AdditionalInfo(),
+              SizedBox(height: 50),
+              Forecast(),
+            ],
+          ),
         ));
   }
 }
