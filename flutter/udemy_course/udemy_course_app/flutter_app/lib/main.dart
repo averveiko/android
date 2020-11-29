@@ -6,13 +6,17 @@ import 'hw2.dart';
 import 'hw3.dart';
 import 'layouts.dart';
 import 'list_view.dart';
+import 'name_navigation.dart';
+import 'navigation.dart';
 
 void main() {
   //runApp(MainWidget());
   //runApp(CounterWidget()); // Домашнее задание с счетчиком
   //runApp(LayoutExampleWidget()); // Пример использования layout виджетов
   //runApp(ListViewExampleWidget()); // Пример использования ListView
-  runApp(WeatherMainScreen()); // Домашнее задание - верстка погодного приложения
+  //runApp(WeatherMainScreen()); // Домашнее задание - верстка погодного приложения
+  //runApp(NavigationExampleWidget()); // Пример использования навигации
+  runApp(NamedNavigationExampleWidget()); // Пример использования навигации
 }
 
 class MainWidget extends StatefulWidget {
@@ -39,7 +43,9 @@ class _MainWidgetState extends State<MainWidget> {
       home: Scaffold(
           appBar: AppBar(
             leading: Icon(Icons.terrain_outlined),
-            title: Text("My First App",),
+            title: Text(
+              "My First App",
+            ),
             centerTitle: true,
           ),
           floatingActionButton: FloatingActionButton(
