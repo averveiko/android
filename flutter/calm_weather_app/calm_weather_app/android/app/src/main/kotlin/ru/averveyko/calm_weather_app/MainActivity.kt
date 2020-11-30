@@ -1,4 +1,4 @@
-package ru.averveyko.flutter_tutorial
+package ru.averveyko.calm_weather_app
 
 import io.flutter.embedding.android.FlutterActivity
 

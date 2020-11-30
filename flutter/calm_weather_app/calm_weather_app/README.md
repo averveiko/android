@@ -1,6 +1,6 @@
-# flutter_tutorial
+# calm_weather_app
 
-Flutter tutorial app.
+Weather application.
 
 ## Getting Started
 
