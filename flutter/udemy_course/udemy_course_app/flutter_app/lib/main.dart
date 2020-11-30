@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'form.dart';
 import 'hw2.dart';
 import 'hw3.dart';
 import 'layouts.dart';
@@ -16,7 +17,8 @@ void main() {
   //runApp(ListViewExampleWidget()); // Пример использования ListView
   //runApp(WeatherMainScreen()); // Домашнее задание - верстка погодного приложения
   //runApp(NavigationExampleWidget()); // Пример использования навигации
-  runApp(NamedNavigationExampleWidget()); // Пример использования навигации
+  //runApp(NamedNavigationExampleWidget()); // Пример использования навигации
+  runApp(FormExampleWidget()); // Пример использования навигации
 }
 
 class MainWidget extends StatefulWidget {
