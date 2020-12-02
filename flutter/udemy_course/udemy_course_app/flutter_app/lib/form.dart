@@ -145,7 +145,7 @@ class _RegisterFormState extends State<RegisterForm> {
             TextFormField(
               onSaved: (value) => newUser.email = value,
               controller: _emailController,
-              validator: _validateEmail,
+              //validator: _validateEmail,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                   labelText: 'Email address',
@@ -181,7 +181,7 @@ class _RegisterFormState extends State<RegisterForm> {
               onSaved: (value) => newUser.story = value,
               controller: _storyController,
               inputFormatters: [
-                // Макс 100 символов
+                // Макс 100 символовAle
                 LengthLimitingTextInputFormatter(100),
               ],
               decoration: InputDecoration(
@@ -371,10 +371,11 @@ class UserInfoPage extends StatelessWidget {
               title: Text('${user.phone}'),
               leading: Icon(Icons.phone),
             ),
+            !user.email.isEmpty ?
             ListTile(
               title: Text('${user.email}'),
               leading: Icon(Icons.phone),
-            )
+            ) : Container()
           ],
         ),
       ),
