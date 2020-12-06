@@ -31,6 +31,10 @@ dependencies:
 
   http: ^0.12.2
 
+  # Заивисимости для автодесериализации json
+  json_serializable: ^3.5.1
+  build_runner: ^1.10.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
