@@ -31,9 +31,12 @@ dependencies:
 
   http: ^0.12.2
 
-  # Заивисимости для автодесериализации json
+  # Зависимости для автодесериализации json
   json_serializable: ^3.5.1
   build_runner: ^1.10.7
+
+  # Зависимость для демонстрации ScopedModel
+  scoped_model: ^1.1.0
 
 dev_dependencies:
   flutter_test:
