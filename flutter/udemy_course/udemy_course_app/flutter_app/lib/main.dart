@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/provider.dart';
+import 'package:flutter_app/provider_hw.dart';
 import 'package:flutter_app/scoped_model.dart';
 
 import 'form.dart';
@@ -26,7 +28,9 @@ void main() {
   //runApp(HttpExampleWidget()); // Пример взаимодействия с сетью
   //runApp(AutoJsonHttpExampleWidget()); // Пример взаимодействия с сетью (+ авто сериализация json)
   //runApp(MyInheritedDemoApp()); // Работа с состоянием при помощи Inherited Widget
-  runApp(MyScopedModelDemoApp()); // Работа с состоянием при помощи Scoped model
+  //runApp(MyScopedModelDemoApp()); // Работа с состоянием при помощи Scoped model
+  //runApp(MyProviderDemoApp()); // Работа с состоянием при помощи Provider
+  runApp(MyProviderHWApp()); // Домашняя работа по лекции Provider
 }
 
 class MainWidget extends StatefulWidget {

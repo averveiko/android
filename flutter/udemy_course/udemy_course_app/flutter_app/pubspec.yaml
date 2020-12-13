@@ -34,9 +34,10 @@ dependencies:
   # Зависимости для автодесериализации json
   json_serializable: ^3.5.1
   build_runner: ^1.10.7
-
   # Зависимость для демонстрации ScopedModel
   scoped_model: ^1.1.0
+  # Зависимость для демонстрации Provider
+  provider: ^4.3.2+3
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +58,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/users.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
